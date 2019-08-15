@@ -1,0 +1,1080 @@
+//Curso MongoDb
+1.- Iniciar servidor MongoDb
+mongod
+2.- Iniciar cliente mongodb
+mongo
+3.- Version de mongo
+db.version()
+/****************
+Comandos
+*****************/
+//Mostrar Base de Datos
+show dbs
+//Cambiar a la base de datos que queremos
+use test1
+//Mostrar Collectiones de la base de datos en la que       //estamos
+show collections
+//borrar base de datos
+db.dropDatabase()
+--------------------------------------------------
+//Crear una nueva base de datos
+use newDatabaseName
+//vemos si la tenemos
+show dbs
+//todavía no la muestra porque no tiene ningun documento
+//Mostrar base de datos en la que estamos
+db
+//Crear Colección
+db.createCollection("profesor")
+db.createCollection('curso')
+//Mostrar Colleción
+show collections
+-------
+//Insertar Documento en Colleción
+db.profesor.insert()
+· Acknowledged: mongo confirma que ha recibido la orden de escritura y que ha aplicado el cambio a la vista en memoria de los datos. Permite al cliente detectar errors de red, claves duplicadas,…
+-------
+db.profesor.insert(
+{
+    "nombre": "Alberto",
+    "cursos": 4,
+    "pais": null,
+    "lenguajes": ["Java", "Kotlin", "Swift"], 
+    "direccion": {
+        "calle": "Mi Calle",
+        "numero": 3
+        }
+})
+
+db.profesor.insert(
+{
+    'nombre': "Alberto",
+    cursos: 4,
+    pais: null,
+    lenguajes: ["Java", "Kotlin", "Swift"], 
+    direccion: {
+        calle: "Mi Calle",
+        numero: 3
+        }
+})
+
+db.profesor.insert(
+{
+    nombre: Alberto,
+    cursos: 4,
+    pais: null,
+    lenguajes: ["Java", "Kotlin", "Swift"], 
+    direccion: {
+        calle: "Mi Calle",
+        numero: 3
+        }
+})
+
+
+db.profesor.insertMany(
+[{
+	"nombre": "Curso MongoDb",
+	"duracion": 300,
+	"estudiantes": 1000,
+	"fecha de lanzamiento": "2020"
+},
+{
+	"nombre": "Curso NodeJs",
+	"duracion": 200,
+	"estudiantes": 500,
+	"fecha de lanzamiento": "2021"
+},
+{
+	"nombre": "Curso Kotlin",
+	"duracion": 200,
+	"estudiantes": 300,
+	"fecha de lanzamiento": null
+}]
+)
+-----
+CRUD
+CREATE, READ, UPDATE, DELETE operaciones
+Son las operaciones básicas que queremos hacer en todas
+nuestras bases de datos y por ello en mongoDb tambien queremos hacerlas
+
+En informatica CRUD es el acronimo que se usa para referirnos a las funciones básicas en bases de datos, así que este acronimo lo vais a ver muchas veces. 
+
+
+Mostrar Base de datos en la que estamos
+db
+
+Mostrar todas las bases de datos
+show dbs
+
+Las bases de datos Admin, Local, Config son bases de datos del sistema de mongoDB no las debemos borrar. Y entre otras coss nos valen para saber el administrador, los logs de mongo db y más cosas del sistema.
+
+Para cambiar de base de datos activa
+use nombreDatabase
+
+Ver todas las colecciones.
+show colections
+
+CREATE DATABASE
+Como hemos dicho con anterioridad las bases de datos en mongoDB son creadas cuando creamos nuestra primera colección en una nueva base de datos.
+
+use udemyDb
+
+recordamos que todavía no esta creada la base de datos, por lo tanto creamos nuestra piemra colección
+
+db.createCollection("profesor")
+Ya tenemos base de datos y colección
+
+show collection
+
+db.profesor.drop() -> borramos colección
+
+db.createCollection("profesor")
+
+//hay dos formas de acceder a una colección
+db.getCollection("profesor").drop()
+db.profesor
+
+//Borrar base de datos en la que estamos activa.
+db.dropDatabase()
+
+--------------------------------------------------
+FIN
+--------------------------------------------------
+
+Insert Methods en Documentos
+Hemos visto como crear una base de datos,
+como crear coleccines dentro de la base de datos
+borrar colección y borrar base de datos.
+Ahora vamos a una parte importante,a crear
+documentos:
+Document: Recordamos que los documentos son una
+estructura compuesta de archivos de pares de clave valor
+similares a los objetos JSON per con más tipos. 
+
+db.nombreCollection.insert(<objet> or <Array of Object>)
+db.nombreCollection.insertOne(object)
+Db.nombreCollection.insertMany(Array of objetc)
+
+db.profesor.insert(
+{
+    "nombre": "Alberto",
+    "cursos": 4,
+    "pais": null,
+    "lenguajes": ["Java", "Kotlin", "Swift"], 
+    "direccion": {
+        "calle": "Mi Calle",
+        "numero": 3
+        }
+})
+
+db.profesor.insertOne(
+{
+    "nombre": "Maria",
+    "cursos": 5,
+    "pais": "España",
+    "lenguajes": ["Java", "Kotlin", "Swift"], 
+    "direccion": {
+        "calle": "Maria Calle",
+        "numero": 5
+        }
+})
+
+db.profesor.insertMany(
+[
+	{
+    	"nombre": "Maria",
+	    "cursos": 5,
+    	"pais": "España",
+    	"lenguajes": ["Java", "Kotlin", "Swift"], 
+    	"direccion": {
+        	"calle": "Maria Calle",
+        	"numero": 5
+        }
+	},
+	{
+    	"nombre": "Marcos",
+	    "cursos": 5,
+    	"pais": "España",
+    	"lenguajes": ["Java", "Kotlin", "Swift"], 
+    	"direccion": {
+        	"calle": "Maria Calle",
+        	"numero": 5
+        }
+	},
+	{
+    	"nombre": "Laura",
+	    "cursos": 5,
+    	"pais": "España",
+    	"lenguajes": ["Java", "Kotlin", "Swift"], 
+    	"direccion": {
+        	"calle": "Maria Calle",
+        	"numero": 5
+        }
+	},
+])
+
+//Hacemos limpieza de documentos.
+//Borramos TODOS documentos
+db.profesor.remove({}) -> borramos colección
+
+//Vemos colecciones
+show collections
+//Insertamos un objeto nulo
+db.profesor.insert({}) -> vemos la respuesta
+//vemos a buscar documentos
+db.profesor().find() -> nod devuelve todos
+
+//Insertamos tres documentos uno por cada
+objeto del array, así que recordar que 
+insert nos vale tanto para insertar 1 documento
+como muchos elmentos.
+db.profesor.insert([{}, {}, {}])
+
+//Buscamos
+db.profesor.find()
+------
+FIN
+------
+
+//RECAPITULAMOS
+INSERT ONE -> Para insertar un documento
+db.profesor.insertOne(Object)
+db.profesor.insertOne(
+{
+    "nombre": "Maria",
+    "cursos": 5,
+    "pais": "España",
+    "lenguajes": ["Java", "Kotlin", "Swift"], 
+    "direccion": {
+        "calle": "Maria Calle",
+        "numero": 5
+        }
+})
+
+INSERT MANY -> Para inserta varios documentos
+db.prfesor.insertMany(Array de Objectos)
+db.profesor.insertMany(
+[
+	{
+    	"nombre": "Maria",
+	    "cursos": 5,
+    	"pais": "España",
+    	"lenguajes": ["Java", "Kotlin", "Swift"], 
+    	"direccion": {
+        	"calle": "Maria Calle",
+        	"numero": 5
+        }
+	},
+	{
+    	"nombre": "Marcos",
+	    "cursos": 5,
+    	"pais": "España",
+    	"lenguajes": ["Java", "Kotlin", "Swift"], 
+    	"direccion": {
+        	"calle": "Maria Calle",
+        	"numero": 5
+        }
+	},
+	{
+    	"nombre": "Laura",
+	    "cursos": 5,
+    	"pais": "España",
+    	"lenguajes": ["Java", "Kotlin", "Swift"], 
+    	"direccion": {
+        	"calle": "Maria Calle",
+        	"numero": 5
+        }
+	},
+])
+
+//Borramos TODOS documentos
+db.profesor.remove({}) -> borramos colección
+------
+
+//Ahora mostramos los tipos de Bson y construimos
+un objetoo
+db.profesor.insertOne({
+	"Double": 10,
+	"String": "Alberto",
+	"Boolean": true,
+	"Date": new Date(),
+	"Null": null,
+	"NumberInt": NumberInt(100),
+    "NumberLong": NumberLong(123356789),
+    "object": {
+        "Double": 12,
+        "String": "Alberto"
+    },
+    "array": [1,2,3]
+})
+//Vemos la colección
+db.profesor.find()
+
+/*
+Si intentamos insertar un objeto con el mismo _id 
+vermos que simplemente no nos deja, puesto que 
+funciona como clave y no puede haber dos claves
+iguales en la misma colección, lo que si nos deja
+es crear la misma _id en otra colección.
+
+db.profesor.insertOne({
+	"_id": "el mismo que cojemos";
+})
+
+—————————————-
+FIND
+—————————————-
+
+CURSOR:
+El cursor en MongoDB se utiliza para las operaciones de Busqueda.
+Cuando hemos utilizando en el pasado el siguiente metodo
+db.profesor.find()
+el metodo find que es para buscar los diferentes documentos de una colección el resultado nos devuelve un puntero a la colección de documentos devueltos, a esto se le denomina cursor. 
+
+Un cursor, es un putero al conjunto de resultados de una consulta en mongo db. Los clientes pueden iterar a través del cursor para obtener los documentos.
+
+Dicho de otro modo cuando ejecutamos una consulta a la base de datos en busca de documentos, lo que nos devuelve es un puntero a los resutlados de dicha consulta en lugar de todos los resultados de una sola vez. Por lo tanto el curso nos permitira extraer todos los documentos de una consulta a la base de datos.
+
+Se utiliza un cursor, debido a que si por ejemplo te quieres bajar 10000 documentos tienes que esperar todo ese tiempo, pero con el cursor todo es más rapido, ya que te bajas uno y luego iteras sobre la lista.
+
+------
+Para probar el cursor vamos a crear 200 documentos
+utilizando java Script y nos vamos a crear una nueva coleccion Curso.
+db.createCollection("cursor")
+Var documentos = [];
+for(let i=1; i<200; i++){
+	objeto = {
+		coche: i
+	};
+	documentos.push(objeto)
+}
+db.curso.insertMany(documentos)
+
+db.cursor.insertMany(docs)
+-----
+vemos lo que tenemos
+db.cursor.find({}) nos muestra la lista entera.
+El cliente pide la lista al servidor.
+El servidor nos devuelve el cursor.
+El cliente con el cursor pide los primeros X elementos de la lista
+El servidor los devuelve y el cursor se mueve al último elemento. 
+
+Si queremos los siguientes elementos, volvemos a hacer otra petición. 
+Esto por ejemplo si te bajas una lista de producto no te bajas toda, sino parte a parte.  
+
+
+db.cursor.find()
+obtenemos 20 documentos
+It -> iterator cursor
+nos devuelve los siguiente 20 y así hasta todos los que tengamos en la lsita.
+
+----------
+Batch size:  Los documentos que se baja del servidor cada vez que son solicitados.
+
+Iterator Size: Los documentos que muestra el cliente por ejemplo Mongo Shell cuando son solicitados. Es decir cuantos se muestran en el cliente, en este caso 20, pero se han bajado 101
+
+Camibiar iterator Size: por defecto20
+db.cursor.find();
+DBQuery.shellBatchSize = 10 lo cambia a 10
+
+Cambiar Batch Size
+db.cursor.find()
+db.cursor.find().batchSize(30) -> nos baja 30 del 
+--------
+
+//Asignar cursor a variable
+var cursor = db.collentionName.find(args);
+//iterar one document
+cursor.next();
+//CHEQUEAR si el cursor tiene siguiente
+cursor.hasNext()
+Cantidad de documentos que quedan en el bacth
+cursor.objsLeftInBacht()
+
+//Ejemplo Real
+cursor.next()
+var cursor = db.getColletions(“cursor”).find({})
+Cursor.hasNext()
+cursor.objsLeftInBacht()
+
+Cursor.toArray() este metodo iterata todo el cursor hasta el final y devuelve un array de objetos.
+
+
+Var cursor = db.getColletion(`cursor’).find({})
+Cursor.toArray() -> ahora tenemos un array de todos los 
+Objetos, en un solo documento.
+--------
+
+Cursor.forEacht(function) itera todos los documento en el cursor y realiza una operación para cada uno de ellos.
+cusro.forEach(printjson)
+
+hacemos una función personalizada
+
+cusro.forEach(doc => print(‘Index of the doc is ${doc.index}’))
+
+———————————-
+FIN
+———————————-
+
+Count, limit, skit and sort
+COUNT
+Cursor.count()-> cuento el numeboer de ducumentos en el cursor.
+
+cusosr.limit(number)-> limita el numero de documento en el cursor
+
+
+cusro.skip(number) -> Skip cierto number de documentos
+
+
+curso.sort(fieldName1) ->ordena el cursor
+
+
+
+db.getColletion(`cursor’).find({}).count()
+db.getColletion(`cursor’).find({}).limit(number): nos devuelve el cursor con 5 elementos
+db.getColletion(`cursor’).find({}).skip(number): nos devuelve el cuero skypeando esos elementos
+db.getColletion(`cursor’).find({}).sort({index -1}) nos devuelve la lista al reves.
+-1 es de mayor a menor y +1 de menor a mayor.
+
+Combinando los métodos de arriba
+db.getColletion(`cursor’).find({}).limit(10).skip(10).sort({index: -1})
+Limit devuelve cursor, skip devuelve cursor y sort tambien, pero todos estos métodos se ejecutan en el lado del servidor,
+por lo tanto solo recibimos un cursor. 
+
+El primer metodo que se ejecuta es sort operation, después skipt y por último limit.
+Da igual, el orden siempre es el mismo.
+Primero se ejecuta limit, luego skip y por último limit.
+Sort ->Skip ->Limit
+
+———————————-
+FIN
+———————————-
+
+QUERIES
+Una query o consulta a la base datos nos sirve para extraer de la base de datos los datos que necesitamos. 
+
+Necesitamos cargar 100 datos en la base de datos a través de un json. Por ejemplo app financiera que además de tus datos economicos, guarda tus amigos y tu perfil completo lo bueno de este documento, es que tenemos además de los componentes básicos, string numero y demás, tenemos arrays y objetos dentro del objeto, que no va a venir bien para nuestras busquedas. etc.
+
+https://next.json-generator.com/N16deTm7P
+
+--------
+
+Queries.json
+db.dropDatabase()
+mongoimport --jsonArray --db banco --collection persona --file /Users/albertopalomarrobledo/Desktop/queries.json
+
+Vamos a mostrar la lista completa
+db.persona.find()
+db.persona.find({})
+
+//Find
+Buscamos por un campo y su valor exacto.
+Ejemplo
+
+db.persona.find({"favoriteFruit" : "banana"})
+db.persona.find({"favoriteFruit" : "banana"}).count()
+
+//MongoDB Compas Filter
+{"favoriteFruit": "banana"}
+
+//Otra busqueda
+db.persona.find({"age": 31})
+db.persona.find({"age": 31}).count()
+
+//Una busqueda que sabemos que solo hay un resultado
+db.persona.find({"balance": "$3,735.20"})
+
+//Busqueda con dos Parametros
+db.persona.find({"favoriteFruit": "banana" , "age": 31})
+
+//Como os de dicho no hace falta indicador las dobles 
+comillas para el nombre del campo, pero si para el 
+valor si es un String. Pero a mi me gusta ponerlo siempre
+eso dependerá de vosotros los que os gusgte más.
+db.persona.find({favoriteFruit: "banana" , age: 31})
+b.persona.find({favoriteFruit: "banana" , age: 31}).count()
+
+A la hora de hacer un busqueda no solo podemos traernos los documentos que sean iguales a los que estamos buscando, por supuesto MondoDb tiene una serie de operadores para hacernos la vida más facil cuando tenemos que buscar algo.
+
+Vemos los operadadores en el powerpoint
+Ejemplo con ellos
+//Buscamos primero con IGUAL
+$eq
+db.persona.find({"favoriteFruit" : {"$eq" :"banana"}})
+db.persona.find({"favoriteFruit" : {"$eq" :"banana"}}).count()
+
+$ne
+db.persona.find({"favoriteFruit" : {"$ne" :"banana"}})
+db.persona.find({"favoriteFruit" : {"$ne" :"banana"}}).count()
+MongoDbCompass
+{"favoriteFruit": {"$eq":"apple"}}
+
+Ahora buscamos un campo de número, en este caso tenemos el campo edad, así que vamos a probar el mayor que y menor que
+
+db.persona.find({"age": {"$gt": 31}})
+db.persona.find({"age": {"$gt": 31}}).count()
+db.persona.find({"age": {"$lt": 31}})
+db.persona.find({"age": {"$lt": 31}}).count()
+db.persona.find({"age": {"$eq": 31}}).count()
+
+db.persona.find({"age": {"$gte": 31}})
+db.persona.find({"age": {"$gte": 31}}).count()
+
+db.persona.find({"age": {"$lte": 31}})
+db.persona.find({"age": {"$lte": 31}}).count()
+
+//Aunque todavia no hemos visto el simbolo &and, cuando se tratan de dos operadores, por ejemplo queremos la edad mayores de 30 y menos de 40 podemos usar la coma
+db.persona.find({"age": {"$gt": 30, "$lt": 40}})
+db.persona.find({"age": {"$gt": 30, "$lt": 35}}).count()
+
+//Por supuesto estos mayor que o menor que se puede utilizar con Strings, con Fechas con Numeros. Así que vamos a ver un ejemplo con Strings
+
+db.persona.find({"name.last": {"$gte" : "W"}})
+db.persona.find({"name.last": {"$gte" : "W"}}).count()
+db.persona.find({"name.last": {"$gte" : "W"}}).sort({"name.last":-1})
+
+MongoCompass
+FILTER {"name.last": {"$gte" : "N"}}
+SORT: {"name.last":-1}
+
+
+———————————-
+FIN
+———————————-
+
+Más Operadores 
+$in y $nin
+
+El operador in selección los documentos donde el valor de un campo es igual a cualquier valor en la matriz especifica. 
+Requieren un array como valores
+El operador nin selecciona los documentos donde el valor de un capo es distinto a cualquier valor de la matriz espcifica.
+
+Empezamos viendo $in
+db.persona.find({"name.first": {"$in": ["Violet", "Lorrie"]}})
+db.persona.find({"name.first": {"$in": ["Violet", "Lorrie"]}}).count()
+
+db.persona.find({"eyeColor": {"$in": ["green", "blue"]}}).count()
+-------
+//Ahora probamos nin, es decir lo que no esten en el array que se pasa
+
+db.persona.find({"name.first": {"$nin": ["Violet", "Lorrie"]}})
+db.persona.find({"name.first": {"$nin": ["Violet", "Lorrie"]}}).count()
+
+db.persona.find({"eyeColor": {"$nin": ["green", "blue"]}}).count()
+
+
+//Operador $and
+Se usa para combinar multiples condiciones. Y el documento debe cumplir todas las condiciones.
+Le pasamos un array de condiciones.
+
+No implicito el and, es diferente a implícito
+db.persona.find({"age": {"$ne":33}, "age": {"$gte": 18}})
+db.persona.find({"age": {"$ne":33}, "age": {"$gte": 20}}).count()
+En este caso la segunda condición, sobreescribe la primera, es decir, que anulara los casos de 25, ahora queda anulada, por que la otra dice que muestra los mayores de 20
+
+db.persona.find({$and: [{"age": {"$ne":33}}, {"age": {"$gte": 18}}]})
+db.persona.find({$and: [{"age": {"$ne":33}}, {"age": {"$gte": 18}}]}).count()
+En este segundo caso muestra los mayores de 20 pero excluye los iguales a 25
+
+Esto solo ocurre cuando es el mismo campo el que se quiere hacer el And. Para diferentes campos da igual, por que no se solapan.
+
+db.persona.find({$and: [{"eyeColor": "green"}, {"age": {"$gte": 33}}]})
+db.persona.find({$and: [{"eyeColor": "green"}, {"age": {"$gte": 33}}]}).count()
+
+
+//Signifca que buscamos a partir de 33
+db.persona.find({$and: [{age: {$ne: 33}} , {age: {$gte: 34}}]})
+db.persona.find({$and: [{age: {$ne: 33}} , {age: {$gte: 34}}]}).count()
+Mostramos lista ordenada por edad
+db.persona.find({$and: [{age: {$ne: 33}} , {age: {$gte: 34}}]}).sort({age:1})
+
+//Signifca que buscamos a partir de 25, por que la segunda condición solapa a la primera, al no inutilizar el and explícito
+db.persona.find({age: {$ne: 25} , age: {$gte: 25}})
+db.persona.find({age: {$ne: 25} , age: {$gte: 25}}).count()
+Es decir es como si la primera condición no la hubiéramos puesto.
+
+
+La regla es clara si no quieres cometer error, no utilices de implícita and, es decir “,”coma, cuando sea el mismo campo el que estas trabajando, por ejemplo edad, hay siempre tienes que asegurarte de utilizar el $and
+
+
+$or
+Cuando se cumple cualquier de las condiciones. es decir 
+en este caso o que isActive sea true o ojos azules igual a blue
+db.persona.find({$or: [{isActive: true} , {eyeColor: “blue"}]})
+db.persona.find({$or: [{isActive: true} , {eyeColor: "blue"}]}).count()
+
+------
+FIN
+------
+
+Queris en Child Objetcts.
+En este caso lo que queremos es buscar un documento que contenga un objeto hijo que sea exactamente igualal objeto que pasamos.
+
+db.persona.find({"name": {
+"first": "Traci",
+"last": "Leonard"
+}})
+
+//Pero si cambiamos el orden del objeto, es decir ponemos primero last y luego first ya no nos encuentra nada. Por que ha de coincidir el objeto al 100%
+
+db.persona.find({"name": {
+"last": "Leonard",
+"first": "Traci"
+}})
+
+//Querys en Array:
+1.- Buscamos un array que cumpla que coinciden todos los campos.
+//Asi no encuentra nada, por que tiene que tener todos los campos del array.
+db.persona.find({"tags" : [
+"duis"
+]})
+
+
+db.persona.find({"tags" : [
+"duis",
+"aliqua",
+"labore",
+"aliqua",
+"duis"
+]})
+
+//Si cambiamso el orden vemos que no nos devuelve nada
+db.persona.find({"tags" : [
+"duis",
+"labore",
+"aliqua",
+"aliqua",
+"duis"
+]})
+
+//Ahora si no ponemos que busque array, nos devuelve todos los documentos que tienen duis
+db.persona.find({"tags": "duis"})
+db.persona.find({"tags": "duis"}).count()
+
+//Por último queremos que nos devuelva aqullos, que su segundo valor en el array sea "aliqua"
+
+db.persona.find({"tags.1": "aliqua"}).count()
+
+------
+FIN
+------
+$all y $Size
+El operador $all selecciona los documentos donde el valor de un campo es un array que contiene todos los elementos
+especificdos. 
+Es decir que a diferencia de la petición que hicimos en el pasado en la que si no era igual no nos lo devolvía el documento, en este caso no hace falta que sea igual el orden, simplemente que esten todos los valores.
+
+db.persona.find({"tags": {$all: ["duis", "aliqua"]}})
+
+$Size El operdador size nos devuelve todos los documentos que contenta el número de elementos que se le han indicado.
+
+db.persona.find({"tags": {$size: 5}})
+
+//Buscamos dentro de un array que tiene objetos
+db.persona.find({"friends.name": "Peck Knight"})
+
+db.persona.find({"friends.id": 0})
+db.persona.find({"friends.id": 0}).count()
+
+db.persona.find({"friends": {"id": 0, "name": "Peck Knight"}})
+
+//Si cambiamos el orden no lo encuentra
+db.persona.find({"friends": {"name": "Peck Knight", "id": 0}})
+
+//Otra forma de buscar es indicar por campo, en lugar de por todo el objeto.
+db.persona.find({"friends.name": "Peck Knight", "friends.id": 0})
+
+//En este caso si podemos cambiar el valor.
+db.persona.find({"friends.id": 0, "friends.name": "Peck Knight"})
+
+--------
+FIN
+---------
+
+$elemMatch
+Como hemos visto a la hora de buscar en un objeto dentro de un array, cuando no se pasan todos los campos en el orden en el que esta en el documento no nos devuelve nada. 
+Por ello cuando no sabemos el orden, pero queremos que nos devuelva el documento tenemos $elemMatch, que no hace faltal ni pasarle todos los campos, ni el orden de los mismos. 
+
+db.persona.find({"friends": {$elemMatch: {"name": "Peck Knight", "id": 0}}})
+
+$exists:
+//Chequeamos que el campo "longitude" existe en el documento
+db.persona.find({"longitude": {$exists: true}})
+db.persona.find({"longitude": {$exists: true}}).count()
+Es decir que si tienes diferentes documentos, pues te bajas solo los que tengan ese campo en concreto.
+
+$type
+db.persona.find({"balance": {$type: "string"}})
+db.persona.find({"balance": {$type: 2}})
+
+//Un uso muy tipico de Type es que como hemos dicho, mongo distingue entre double, int u long, por ejemplo si queremos buscar en nuestra base de datos por un valor en concreto, pero sabiendo que es int, long o duble podemos utilizar type.
+db.persona.find({"age": {$type: "double", $eq: 33}})
+db.persona.find({"age": {$type: "int", $eq: 33}})
+
+-------
+FIN
+-------
+
+Fields Filtering
+Bien hasta ahora nos hemos bajado el documento completo cuando hacemos una busqueda. Pero por lo general eso es malgastar recursor, recuerda, que al final suele ser un cliente por ejemplo una aplicación web la que pide los documentos para mostrarlos en pantalla, pero si por ejemplo solo queremos mostrar el balance de nuestros clientes, no tendrá ningún sentido que nos bajemos el resto de campos del documento, para ello esta el Field Filternin que nos permite elmeinar los campos de los documentos antes de que sean enviados. Es decir el servidor solo nos acaba enviando lo que necesitamos. 
+1.- Signifcia que ese campo queremos que lo envie y el resto no lo envia.
+0.- Significa que quermeos que ese campo no lo envie y envie el resto.
+db.persona.find({},{"balance": 1})
+
+db.persona.find({},{"balance": 1, "name.first": 1})
+
+//para que no nos envie el id ponemos el 0
+db.persona.find({},{"balance": 1, "_id": 0})
+
+0.- Significa que quermeos que ese campo no lo envie y envie el resto.
+db.persona.find({},{"balance": 0})
+
+//Tambien nos vale findOne
+db.persona.findOne({},{"balance": 0})
+
+//En Resumidas cuentas Filtering nos filtra a la información que quiere realmente el cliente, para hacer la comunicación mucho más optima.
+
+//REGULAR EXPRESSION
+Las expresiones regulares es un tema aparte, y se podría hacer un curso de ellas que durara horas. En este capitulo vamos a ver que MongoDb tambien nos acepta expresiones regulares.
+Recordamos que una expresión regular es una secuencia de caracteres que conforma un patrón de busqueda. 
+$regex
+db.persona.find({"company": {$regex: /VOL/i}})
+db.persona.find({"company": {$regex: /VoL/}})
+
+//ahora probamos con que un campo empieze de determinada
+manera
+db.persona.find({"latitude": {$regex: /^38/}})
+db.persona.find({"latitude": {$regex: /38/}})
+
+-----
+FIN
+------
+
+UPDATE DOCUMENTS
+update()
+updateOne()
+updateMany()
+Bien ya hemos visto como crear una base de datos, crear una colección y documentos en MongoDb, tambien hemos visto como leer documentos de la base de datos, tanto todos los documentos, como utilizando operadores y ahora pasamos al tercer punto de CRUD, crear, leer, actualizar y borrar, en este caso vamos a ver actualizar documentos de nuestra base de datos en mongo db.
+
+Operador $set y $unset
+db.persona.update({"_id": "5d5015060121ab5fa3e06f17"}, 
+{$set: {"name.first": "Paco", "name.last": "Mer"}})
+
+//Si un campo no existe se puede añadir sin ningun tipo de 
+problemas
+db.persona.update({"_id": "5d5015060121ab5fa3e06f17"}, 
+{$set: {"name.first": "Paco", "name.last": "Mer", "name.second": "PacoSe"}})
+
+db.persona.find({"_id": "5d5015060121ab5fa3e06f17"})
+
+db.persona.update({"_id": "5d5015060121ab5fa3e06f17"},
+{$set: {"salary": 1000}})
+
+db.persona.find({"_id": "5d5015060121ab5fa3e06f17"})
+
+
+//Unset
+El operador unset borra un campo particular de un documento. 
+db.persona.update({"_id": "5d5015060121ab5fa3e06f17"},
+{$unset: {"email": "vilma.blackwell@gleamink.co.uk"}})
+db.persona.find({"_id": "5d5015060121ab5fa3e06f17"})
+
+//Realmente no hace falta poner el mail complento, por consistencia lo podmeos dejar a uno el campo a borrar
+
+db.persona.update({"_id": "5d5015060121ab5fa3e06f17"},
+{$unset: {"latitude": 1}})
+db.persona.find({"_id": "5d5015060121ab5fa3e06f17"})
+
+//Nota importante. El metodo update solo actualiza el primer documento que cumple con la query. Por ejemplo digamos que hacemos una query que la cumplan todos los documentos, solo se actualizara el primero que encuentre.
+
+db.persona.update({},
+{$set: {"salary": 500}})
+db.persona.find({"_id": "5d5015060121ab5fa3e06f17"})
+
+//Ahora vamos a actualizar un documento que no existe,
+por ejemplo pasamos un id que no esta en la base de datos
+
+db.persona.update({"_id": "0000"},
+{$set: {"salary": "323232"}})
+vemos que no ha encontrado ninguno, y por lo tanto nada ha sido actualizado
+
+Vamos a actualizar un documento que tiene un salario de 500 a 500, es decir que no actualizamos nada y vemos la respuesta en este caso nos dice que nModifid es cero.
+db.persona.update({"_id": "5d5015060121ab5fa3e06f17"},
+{$set: {"salary": 500}})
+
+-------
+FIN
+_______-
+
+//Con update() podemos actualizar varios documentos en un solo envio
+//multi: true para actualizar todos y no solo el primero.
+multi: true
+
+//Como bien dijimos tenemos el campo options, en el que podemos decir una opción, en este caso, que queremos hacer
+multiples actualizaciones.
+
+//vamos añadir processe fall a todos los documentos
+db.persona.update({}, {$set: {"salary": 1000}},{multi: true})
+WriteResult({ "nMatched" : 5, "nUpserted" : 0, "nModified" : 4 })
+
+//updateOne()-> Modifica un documenbto. Es decir nos aseguramos que solo se actualiza un documento.
+
+db.persona.updateOne({"eyeColor" :green}, {$set: {"salary": 2000}})
+
+"acknowledged" -> mongo nos confirma que ha recibido orden de escritura, importante para detectar errores a la hora de hacer la petición.
+
+//UpdateMany. Para actualizar mas
+db.persona.updateMany({"eyeColor" :"blue"}, {$set: {"salary": 5000}})
+
+//ReplaceOne
+Remplaza el contenido de un documento, por un nuevo documento, es decir que lo borra entero y le pone lo nuevo. de _id sigue siendo el mismo
+db.persona.replaceOne({"_id": "5d5015069d894b19b91c71f1"}, {"_id": "5d5015069d894b19b91c71f1", "name.first": "Laura", "name.last": "Torres", "salary": 300})
+
+pero digamos que queremos borrarlo de la base de datos y dejar su ide.
+
+db.persona.replaceOne({"_id": "5d5015069d894b19b91c71f1"}, {"_id": "5d5015069d894b19b91c71f1", "detele": true})
+
+-----
+FIN
+-----""
+
+Combinar multiple update Operators
+Combinacion de muchos operadores solo en una sola solicitud.
+Es decir utilizar el metodo set y unset
+db.persona.updateOne({"_id": "5d5015069d894b19b91c71f1"}, {}, {$set: {"name.first": "Laura"}, $unset: {"email": 1}})
+
+//Operador Rename
+Imagina que quieres renombrar un campo en toda tu base de datos, por ejemplo vamos a pasar el campo age a edad pues para ello tenemos el operador rename
+Coge el nombre actual y lo repmplaza por el nuevo. 
+
+db.persona.updateMany({}, {$rename: {"age": "edad"}})
+
+Fechas:
+Un tema muy importante cuando se trabaja con base de datos es el tema de la fechas, por lo general siempre que creas un documento quieres saber cuando ha sido creado y como poco quieres saber tambien cuando ha sufrido la última actualización.
+Por ejemplo digamos que esta base de datos bancaria, quieres sabrer cuando ha sido creado el documento, y tambien quieres sabrer cuando sufrio la última actualización. 
+Por lo general se suelen dar el nombre createAt y updateAt, pero tambien podrias tener un array de actualizaciones, nosotros lo veremos con el ejemplo de createAt y updateAt
+db.persona.updateOne({"_id": "5d50150630f4f534c05f9e45"}, {$set: {"createAt": new Date(), "updateAt": new Date()}})
+
+db.persona.updateOne({"_id": "5d5015060121ab5fa3e06f17"}, {$set: {"createAt": new Date(), "updateAt": new Date()}})
+
+//Aqui hemos visto como se hace con set
+pero mongo tiene el operador $currenDate que nos hace 
+la vida más facil.
+db.persona.updateMany({}, {$currentDate:{"updateAt": true}})
+
+db.persona.updateOne({"_id": "5d501506d49a13e3cd8c25c2"}, {$currentDate: {"updateAt": true}})
+
+
+//Si queremos actualiar uno
+db.persona.updateOne({"_id", "5d50150630f4f534c05f9e45"}, {$set: {"eyeColor": "azul"}, $currentDate: {"updateAt: true"}}})
+----
+FIN
+____
+
+Actualizar un Array
+
+$ Operador $push -> Añade elementos en un array que ya existe. En el caso de que el array no exista lo crea con los elementos indicados.
+
+//Añadimos elementos al array tags
+db.persona.updateOne({"_id": "5d5015060121ab5fa3e06f17"}, {$push: {"tags": "euro"}})
+
+db.persona.updateOne({"_id": "5d50150630f4f534c05f9e45"}, {$push: {"moneda": "euro"}})
+//Vemos que duplica euro
+db.persona.updateOne({"_id": "5d50150630f4f534c05f9e45"}, {$push: {"moneda": "euro"}})
+
+db.persona.updateOne({"_id": "5d50150630f4f534c05f9e45"}, {$push: {"moneda": "peso"}})
+
+Aqui vemos que euro no lo vuelve a poner. Si queremos
+que lo añada tenemos otro operador.
+---
+---
+El operador $each-> Nos añade elementos a un array y si existen los duplica. 
+db.persona.updateOne({"_id": "5d5015060121ab5fa3e06f17"}, {$push: {"moneda": {$each: ["rupia", "euro"]}}})
+//Nos vuelve a añadir los elementos aunque esten duplicados
+
+db.persona.updateOne({"_id": "5d5015060121ab5fa3e06f17"}, {$push: {"moneda": {$each: ["rupia", "euro"]}}})
+
+---
+---
+El operador $addToSet -> Hace los mismo que push, pero chequea si existe el elemento, en caso de que este duplicado no lo pondra. Así que no tendremos elementos ducplicados.
+db.persona.updateOne({"_id": "5d5015060121ab5fa3e06f17"}, {$addToSet: {"moneda": "rupia"}})
+
+---
+El operador $pop borra elementos de un array
++1 elemina el ultimo elemento del array
+-1 elimina el primer elemento del array.
+Si solo hay un elmento, lo borra pero el array sigue existiendo solo que sin valores.
+db.persona.updateOne({"_id": "5d5015060121ab5fa3e06f17"}, {$pop: {"moneda": 1}})
+
+---
+El operador $pull borra los elementos seleccionados de un array que cumple una condición. Si existen los borra
+db.persona.updateOne({"_id": "5d5015060121ab5fa3e06f17"}, {$pull: {"moneda": {"$gt": "euro"}}})
+---
+El operador $pullAll borra todos los elementos del array
+que coinciden con el valor que se les pasa. No hace falta utilizar ninguna condición.
+db.persona.updateOne({"_id": "5d5015060121ab5fa3e06f17"}, {$pullAll: {"moneda": ["euro", "dolar"]}})
+
+-----
+FIN
+-----
+
+Operador Posicional dentro de un Array:
+//El simbolo dolar nos va a permitir posicionarnos en el elemento del array que cumple una Query, en este ejemplo imaginemos que estamos buscando el amigo con la posición 1 del array y que además queremos modificar dentro del array moneda Euro por EUR, que es la otra forma en la que se conoce dicha moneda. Pues para ello tenemos el simbolo $ nunca mejor dicho.
+Es decir que el $ va a reprensentar el indice del array donde esta el elemento con valor Dolar 
+
+db.persona.updateOne({"_id": "5d5015060121ab5fa3e06f17", "moneda" : "dolar"}, {$set: {"moneda.$": "USD"}})
+----
+Ahora vamos a ver un ejemplo en vez con set utilizando unset y viendo lo que pasa
+db.persona.updateOne({"_id": "5d5015060121ab5fa3e06f17", "moneda" : "dolar"}, {$unset: {"moneda.$": 1}})
+Vemos que el elmento sigue existiendo solo que con valor null dentro del array. Así que si quieres hacer un borrado completo la solución es utilizar pull o pullAll
+
+----
+FIN
+----
+d
+Operador Posicional en Nested Document
+Imaginemos que en este caso queremos cambiar el segundo valor del array frieds, es decir el segundo objeto el que tiene nombre a Georgette Landry. Por Laura Torres.
+
+db.persona.updateOne({"_id": "5d5015060121ab5fa3e06f17", "friends.id" : 1}, {$set: {"friends.$.name": "Laura Torres"}})
+Como vemos sigue la misma logica que hemos visto cuando el array tiene campos simples, pero si lo forma un objeto vemos que es igual.
+Añadimos un campo:
+db.persona.updateOne({"_id": "5d5015060121ab5fa3e06f17", "friends.id" : 1}, {$set: {"friends.$.email": "laura@laura.com"}})
+
+------
+
+//Operador $elemMatch -> encuentra dentro de un array el objeto que corresponde  y lo vamos a actualizar con los datos nuevos. Hay que enviar al menos dos datos del objeto que tenemos que buscar, es decir, no vale con uno.
+para eso ya teniamos el ejemplo Anterior.
+Es decir que vamos a buscar el objeto con email y nombre y no hace falta poner el id
+y si lo encuentra lo actualzia por el valor que se le pase
+
+db.persona.updateOne({"_id": "5d5015060121ab5fa3e06f17", "friends": {$elemMatch: {"name": "Laura Torres", "email": "laura@laura.com"}}}, {$set: {"friends.$.edad": 33}})
+
+---
+$El operador $inc nos incrementa en uno un numero que tengamos en nuestra base de datos. Por ejemplo imagina que tienes un campo que es contador de visitas aun perfil, y cada que que se visite pues quieres añadirle uno para saber el valor que tiene. 
+para ello tenemos inc. 
+Vamos a ver el ejemplo con la edad lo vamos a incrementar en dos unidades. Así que no necesitamo leer y saber que valor tiene y luego realizar la operación de sumar, sino que podemos hacerlo too en una consulta.
+
+db.persona.updateOne({"_id": "5d5015060121ab5fa3e06f17", "friends": {$elemMatch: {"name": "Laura Torres", "email": "laura@laura.com"}}}, {$inc: {"friends.$.edad": 2}})
+
+Como hemos visto no hace falta ser sumas de uno en uno, sino que puede ser cualquier número.
+
+----
+FIN
+----
+
+Operaciones de Delete
+Vamos a querer borrar documentos
+borrar colecciones 
+y borrar bases de datos.
+
+Vamos a empezar a borrar documentos. 
+Recordamos que tenemos 100 documentos en nuestra base de datos actual y por supuesto tenemos los varios metodos para eleminar documentos.
+
+Recuerda que una borras un documento, collecion o base de datos si no tienes copia de seguridad no la podrás recuperar, así que recuerda que las operaciones de borrado siempre tienes que estar muy seguro.
+
+Asi que lo primero que vamos a hacer es una copia de nuestra base de datos, puesto que al final de este capitulo bamos a borrar todos los documentos, colleccion y base de datos.
+
+db.copyDatabase("banco","bancoDelete","127.0.0.1") 
+
+remove() - deleteOne() - deleteMany()
+------
+
+remove() -> puedes eleminar un documento o varios que cumplan una query
+Si pasamos de segundo parametro true solo borra uno, sino ponemos nada borrara todos que cumplan
+la query
+remove({})-> borra todo si no pones condición
+db.persona.remove({})
+Así que nos situamos en nuestra base de datos bancoDelete y la borramos todos los documentos.
+
+true -> just one document sera borrado
+db.persona.remove({"_id" : "5d50150630f4f534c05f9e45"}, true)
+//Borramos solo el primer documento con ojos marrones
+db.persona.remove({"eyeColor" : "blue"}, true)
+
+//Borramos todos los que tienen los ojos Azules
+db.persona.remove({"eyeColor" : "blue"})
+
+db.persona.remove({})
+
+db.copyDatabase("banco","bancoDelete2","127.0.0.1") 
+use bancoDelete1
+-----
+deleteOne() -> Borra un solo dumento.
+db.persona.deleteOne({"eyeColor" : "green"})
+
+----
+deleteMany() -> Borra todos los que cumplan la condicion
+db.persona.deleteMany({"eyeColor" : "green"})
+
+---
+Borrar todos los documenbtos
+db.persona.deleteMany({})
+
+---
+drop() -> Borra una coleccion entera
+Duplicamos base de datos
+
+db.copyDatabase("banco","bancoDelete2","127.0.0.1") 
+
+//Borramos coleccion persona
+db.persona.drop()
+
+//Borramos la base de datos entera
+dropDatabase()
+Perdemos todo asi que cuidado
+
+----
+FIN
+----
+
+
+
+
+
+
+
+
+
+Find one Document
+db.nombreColleciont.findOne(“query”, “fields”);
+Este devuelve el documento seleccionado. Devuelve el primer documento que cumple cierta query.
+db.nombreColleciont.findOne({})
+doc = db.nombreColleciont.findOne({“index”: 5})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
